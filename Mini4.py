@@ -1,3 +1,4 @@
+#Du An 4
 kho = ["sua tuoi", "banh mi", "trung", "ca phe", "duong"," xoai","com","bobo"]
 
 #chuan hoa ten, ghi de
