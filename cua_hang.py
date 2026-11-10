@@ -1,40 +1,75 @@
 
-# Kho hang
-def hien_thi_kho(kho):
-    """Hien thi danh sach san pham va gia tien trong kho."""
-    print("Kho hien co:", list(kho.keys()))
+# DU AN - BAI 9, BAI CUOI
 
-# Them mon vao gio hang
-def them_mon(kho):
-    """Cho khach nhap ten mon va them vao gio hang."""
+from san_pham import SanPham
+
+def chinh():
+
+    # Can lop SanPham da viet o Bai viet 2.
+    kho = [
+        SanPham("sua tuoi", 25000),
+        SanPham("banh mi", 15000),
+        SanPham("trung ga", 35000)
+    ]
+
+    # 1) In danh sach san pham
+    print("DANH SACH SAN PHAM")
+    for i in range(len(kho)):
+        print(f"{i+1}. {kho[i]}")
+
+    # 2) Vong lap mua hang, sentinel la "xong"
     gio = []
+    soluong = []
 
     while True:
-        pick = input("Mua gi? (go 'xong' de dung): ")
+        pick = input("Chon san pham (nhap xong de dung): ")
+
         if pick == "xong":
             break
 
-        gia = kho.get(pick)
-        if gia != None:
-            gio.append(pick)
-            print(f"Da them: {pick}")
-        else:
-            print(f"San pham {pick} khong ton tai!")
-    return gio
+        tim_thay = False
 
-# Tinh tien
-def tinh_tien(kho, gio):
-    """Tinh tong tien cac mon hang trong gio"""
+        for i in range(len(kho)):
+            if pick == str(i+1):
+                ask = int(input("Nhap so luong: "))
+
+                gio.append(kho[i])
+                soluong.append(ask)
+
+                print("Da them san pham vao gio hang!")
+                tim_thay = True
+                break
+
+        if tim_thay == False:
+            print("Lua chon khong hop le!")
+
+    # 3) Tinh tong tien
     tong = 0
-    for ten in gio:
-        tong += kho.get(ten)
-    return tong
 
-# Ham chinh
-def chinh(kho):
-    """Dieu khien chuong trinh mua hang."""
-    hien_thi_kho(kho)
-    gio = them_mon(kho)
-    print("Gio hang:", gio)
-    tong = tinh_tien(kho, gio)
-    print("Tong tien:", tong)
+    print("\nGIO HANG")
+
+    for i in range(len(gio)):
+        tien = gio[i].tinh_gia() * soluong[i]
+        tong += tien
+
+        print(f"{gio[i].ten} - So luong: {soluong[i]} - Thanh tien: {tien:.0f} d")
+
+    print(f"Tong cong: {tong:.0f} d")
+
+    # 4) Ghi hoa don ra don_hang.txt
+    with open("don_hang.txt", "w", encoding="utf-8") as file:
+
+        for i in range(len(gio)):
+            tien = gio[i].tinh_gia() * soluong[i]
+
+            file.write(
+                f"{gio[i].ten} - So luong: {soluong[i]} - "
+                f"Thanh tien: {tien:.0f} d\n"
+            )
+
+        file.write(f"Tong cong: {tong:.0f} d\n")
+
+    # Doc lai hoa don de kiem chung
+    with open("don_hang.txt", "r", encoding="utf-8") as file:
+        print("\nNOI DUNG HOA DON")
+        print(file.read())
